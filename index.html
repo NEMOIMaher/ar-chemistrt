@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الواقع المعزز - عنصر كيميائي</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; width: 100vw; height: 100vh; background-color: #f4f4f4; overflow: hidden; }
+    
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    model-viewer { 
+      width: 100%; 
+      height: 100%; 
+      outline: none;
+    }
+    
+    /* تصميم الزر كطبقة فوقية Overlay */
+    .ar-overlay-btn {
+      position: absolute; /* مفصول عن المجسم */
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      cursor: pointer;
+      z-index: 9999; /* عشان نضمن إنه فوق المجسم */
+      pointer-events: auto; /* تفعيل النقرات إجبارياً */
+    }
+
+    /* إخفاء أي زر AR افتراضي عشان ما يصير تداخل */
+    model-viewer::part(default-ar-button) {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <model-viewer 
+      id="my-model"
+      src="elament92.glb" 
+      ar 
+      ar-modes="webxr scene-viewer quick-look" 
+      camera-controls 
+      auto-rotate 
+      autoplay 
+      shadow-intensity="1">
+    </model-viewer>
+
+    <!-- الزر الطبقي -->
+    <button id="custom-ar-btn" class="ar-overlay-btn">
+      📸 افتح الكاميرا
+    </button>
+  </div>
+
+  <script>
+    const modelViewer = document.getElementById('my-model');
+    const customBtn = document.getElementById('custom-ar-btn');
+
+    // تفعيل الكاميرا برمجياً عند الضغط
+    customBtn.addEventListener('click', () => {
+      // فحص إذا كان التلفون بيدعم الـ AR
+      if (modelViewer.canActivateAR) {
+        modelViewer.activateAR();
+      } else {
+        alert('عذراً، متصفحك أو جهازك لا يدعم فتح الكاميرا للواقع المعزز.');
+      }
+    });
+  </script>
+
+</body>
+</html>
